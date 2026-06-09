@@ -1,0 +1,357 @@
+/* =========================================
+   RESET & SMOOTH SCROLLING
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    /* This creates the smooth scroll effect when clicking nav links */
+    /* scroll-behavior: smooth;  */
+    font-family: Arial, sans-serif;
+}
+
+/* =========================================
+   STICKY HEADER (Transparent to White)
+   ========================================= */
+.sticky-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 20px 140px; /* 140px Left padding ensures alignment */
+    z-index: 100; 
+    transition: background-color 0.4s ease, box-shadow 0.4s ease;
+    background-color: transparent; 
+    color: white; 
+}
+
+/* The class added by JavaScript when scrolled */
+.sticky-header.scrolled {
+    background-color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: #333; /* Changes text dark against white background */
+}
+
+/* Logo and Nav Positioning */
+/* .logo-container {
+    
+    width: 50px;
+    height: 50px;
+    background-color: #ddd; 
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 30px; 
+    
+} */
+
+.nav-logo {
+    height: 55px; /* Adjust this number if your logo is too big/small */
+    width: auto;
+    margin-right: 40px; /* Space between logo and nav links */
+    transition: filter 0.4s ease;
+}
+
+.main-nav ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+    font-size: 1.1rem;
+    position: relative; /* Required for the underline positioning */
+    padding-bottom: 5px;
+    transition: color 0.3s ease;
+}
+
+.main-nav a:hover {
+    color: #8DC63F; /* Sustainability Green */
+}
+
+.main-nav a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: 0;
+    left: 0;
+    background-color: #8DC63F;
+    transform: scaleX(0); /* Squishes it to 0 width */
+    transform-origin: bottom left; /* Makes it grow from left to right */
+    transition: transform 0.3s ease-out;
+}
+
+.main-nav a:hover::after {
+    transform: scaleX(1); /* Expands it to full width */
+}
+
+/* =========================================
+   HERO SECTION & BACKGROUND
+   ========================================= */
+.hero-wrapper {
+    height: 100vh;
+    width: 100%;
+    background-image: url('https://gymkhana.iitb.ac.in/~sustainabilitycell/images/main-background.webp');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center; 
+    padding: 0 140px; /* Matches the 140px left padding of the header */
+}
+
+.hero-content-layout {
+    max-width: 600px;
+    margin-top: -80px; /* Moves content up to make room for rotating text */
+    color: white;
+}
+
+.main-heading {
+    font-size: 3.8rem;
+    font-weight: 900; /* Makes the text horizontally thicker */
+    line-height: 1.2;
+    margin-bottom: 15px;
+    color: white; /* "Sustainability Cell" is now white */
+}
+
+/* The text we want to glow later */
+.glow-text {
+    color: #8DC63F; /* "IIT Bombay" is now green */
+    transition: text-shadow 0.4s ease;
+}
+
+.sub-heading {
+    font-size: 1.4rem; /* Slightly larger for better readability */
+    line-height: 1.5;
+    margin-bottom: 15px; /* Tightened from 20px */
+}
+
+/* =========================================
+   ROTATING FUN FACTS (Quote Style)
+   ========================================= */
+/* Container holds the quote */
+.fun-facts-container {
+    height: 80px; 
+    overflow: hidden;
+    position: relative;
+    color: white;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    
+    /* ADD THIS: Closes the gap above and below */
+    margin-top: 10px; 
+    margin-bottom: 10px; 
+}
+
+.quote-text {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    position: absolute;
+    width: 100%;
+    /* Slide + Fade Animation */
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+/* The Curly Quotes */
+.quote-text::before { content: '“'; font-size: 2rem; vertical-align: middle; margin-right: 5px; }
+.quote-text::after { content: '”'; font-size: 2rem; vertical-align: middle; margin-left: 5px; }
+
+/* States for the slide animation */
+.slide-out { opacity: 0; transform: translateX(-50px); }
+.slide-in { opacity: 1; transform: translateX(0); }
+
+/* =========================================
+   LEARN MORE BUTTON & NEON HOVER
+   ========================================= */
+.button-container {
+    margin-top: -30px; /* Adjust this to move the button up or down */
+}
+
+.learn-more-btn {
+    background-color: #8DC63F; /* Green */
+    color: #003366; /* Blue text */
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: 2px solid transparent;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-decoration: none; 
+    display: inline-block;
+}
+
+.learn-more-btn:hover {
+    background-color: white;
+    color: #8DC63F;
+    border-color: #8DC63F;
+    /* Toned down: smaller blur radius and lower opacity */
+    box-shadow: 0 0 8px rgba(141, 198, 63, 0.5), inset 0 0 5px rgba(141, 198, 63, 0.2);
+}
+
+/* THE REMOTE CONTROL GLOW EFFECT
+   When the button inside the hero-wrapper is hovered, 
+   target the .glow-text and apply a shadow!
+*/
+.hero-wrapper:has(.learn-more-btn:hover) .glow-text {
+    /* Toned down: Smaller radius and 60%/40% opacity instead of solid color */
+    text-shadow: 0 0 10px rgba(141, 198, 63, 0.6), 0 0 20px rgba(141, 198, 63, 0.4);
+}
+
+body:has(.learn-more-btn:hover) .nav-logo {
+    /* Uses drop-shadow so the glow wraps around the shape of the leaf/text */
+    filter: drop-shadow(0 0 10px rgba(141, 198, 63, 0.8));
+}
+
+/* =========================================
+   INVISIBLE GLOBE HOTSPOT GLOW
+   ========================================= */
+.globe-hotspot {
+    position: absolute;
+    /* We use percentages/vw so it moves responsively with the background image */
+    right: 8%; 
+    top: 43.2%;
+    transform: translateY(-50%); /* Perfectly centers it vertically */
+    
+    /* Size of the invisible circle */
+    width: 35vw; 
+    /* max-width: 500px; */
+    aspect-ratio: 1 / 1; /* Forces it to remain a perfect circle */
+    border-radius: 50%;
+    
+    /* CRITICAL: Prevents this invisible box from blocking mouse clicks! */
+    pointer-events: none; 
+    
+    transition: all 0.5s ease;
+    opacity: 0; /* Hidden by default */
+    /* border: 2px solid red; For testing: Shows the position and size of the hotspot */
+}
+
+/* THE REMOTE GLOW TRIGGER */
+body:has(.learn-more-btn:hover) .globe-hotspot {
+    opacity: 1;
+    /* The inner glow */
+    background: radial-gradient(circle, rgba(141, 198, 63, 0.15) 0%, rgba(141, 198, 63, 0) 70%);
+    /* The outer glow */
+    box-shadow: 0 0 90px 40px rgba(141, 198, 63, 0.2);
+}
+/* =========================================
+   STANDARD CONTENT SECTIONS (For Scrolling)
+   ========================================= */
+section {
+    padding: 100px 50px;
+    min-height: 50vh;
+}
+
+.section-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+/* Alternating background colors just to visualize the scroll */
+#events, #contact { background-color: #f9f9f9; }
+
+/* =========================================
+   EDGE VINES ANIMATION (Lush Blooming Effect)
+   ========================================= */
+.vine-container {
+    position: absolute;
+    bottom: 0;
+    width: 60px; 
+    height: 65vh; 
+    pointer-events: none; 
+    z-index: 2; 
+}
+
+#vine-left { left: 0; }
+#vine-right { 
+    right: 0; 
+    transform: scaleX(-1); 
+}
+
+.vine-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 5px rgba(141, 198, 63, 0.5));
+}
+
+.vine-stem {
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600; 
+    transition: stroke-dashoffset 1.3s ease-in-out;
+}
+
+.vine-leaf {
+    transform: scale(0); 
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease-in;
+}
+
+/* Hinge points for all 7 leaves based on their exact coordinates */
+.leaf-1 { transform-origin: 60px 450px; }
+.leaf-2 { transform-origin: 65px 380px; }
+.leaf-3 { transform-origin: 58px 300px; }
+.leaf-4 { transform-origin: 35px 220px; }
+.leaf-5 { transform-origin: 30px 150px; }
+.leaf-6 { transform-origin: 55px 80px; }
+.leaf-7 { transform-origin: 45px 30px; }
+
+/* THE REMOTE TRIGGERS */
+body:has(.learn-more-btn:hover) .vine-stem {
+    stroke-dashoffset: 0; 
+}
+
+body:has(.learn-more-btn:hover) .vine-leaf {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* 7 Sequential Delays perfectly timed to the stem's growth */
+body:has(.learn-more-btn:hover) .leaf-1 { transition-delay: 0.15s; }
+body:has(.learn-more-btn:hover) .leaf-2 { transition-delay: 0.3s; }
+body:has(.learn-more-btn:hover) .leaf-3 { transition-delay: 0.5s; }
+body:has(.learn-more-btn:hover) .leaf-4 { transition-delay: 0.7s; }
+body:has(.learn-more-btn:hover) .leaf-5 { transition-delay: 0.9s; }
+body:has(.learn-more-btn:hover) .leaf-6 { transition-delay: 1.1s; }
+body:has(.learn-more-btn:hover) .leaf-7 { transition-delay: 1.25s; }
+
+/* =========================================
+   PARTING CLOUDS ANIMATION (Refined)
+   ========================================= */
+.cloud-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px; /* REDUCED: Keeps clouds lower on the screen */
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden; 
+}
+
+.cloud-layer {
+    height: 100%;
+    width: 55%; 
+    position: absolute;
+    bottom: -5px; 
+}
+
+/* FIX: Targeting the path directly removes the rectangular box glitch */
+.cloud-layer path {
+    filter: drop-shadow(0 -8px 10px rgba(255, 255, 255, 0.4));
+}
+
+.cloud-left { left: 0; }
+.cloud-right { right: 0; }

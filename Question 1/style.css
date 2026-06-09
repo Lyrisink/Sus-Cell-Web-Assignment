@@ -218,23 +218,19 @@ body:has(.learn-more-btn:hover) .nav-logo {
    ========================================= */
 .globe-hotspot {
     position: absolute;
-    /* We use percentages/vw so it moves responsively with the background image */
     right: 8%; 
     top: 43.2%;
-    transform: translateY(-50%); /* Perfectly centers it vertically */
-    
-    /* Size of the invisible circle */
+    transform: translateY(-50%);
     width: 35vw; 
-    /* max-width: 500px; */
-    aspect-ratio: 1 / 1; /* Forces it to remain a perfect circle */
+    aspect-ratio: 1 / 1; 
     border-radius: 50%;
     
-    /* CRITICAL: Prevents this invisible box from blocking mouse clicks! */
-    pointer-events: none; 
+    /* CRITICAL CHANGES HERE */
+    cursor: pointer; 
+    display: block; 
     
     transition: all 0.5s ease;
-    opacity: 0; /* Hidden by default */
-    /* border: 2px solid red; For testing: Shows the position and size of the hotspot */
+    opacity: 0; 
 }
 
 /* THE REMOTE GLOW TRIGGER */

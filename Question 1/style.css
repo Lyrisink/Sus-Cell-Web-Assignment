@@ -136,6 +136,10 @@ html {
     margin-bottom: 15px; /* Tightened from 20px */
 }
 
+#iitb {
+    font-size: 3.1rem;
+}
+
 /* =========================================
    ROTATING FUN FACTS (Quote Style)
    ========================================= */
@@ -192,9 +196,9 @@ html {
 }
 
 .learn-more-btn:hover {
-    background-color: white;
-    color: #8DC63F;
-    border-color: #8DC63F;
+    background-color: #1ebf3d;
+    color: #000000;
+    border-color: #1ebf3d; /* Darker green border on hover */
     /* Toned down: smaller blur radius and lower opacity */
     box-shadow: 0 0 8px rgba(141, 198, 63, 0.5), inset 0 0 5px rgba(141, 198, 63, 0.2);
 }

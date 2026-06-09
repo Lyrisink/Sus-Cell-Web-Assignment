@@ -31,3 +31,8 @@ Alternatives like Vue, Angular, Google maps API, etc exist but these provide the
 * Clicking on these locations will provide a detailed description of the location, different policies put into place etc.On top it will have different tabs to categorize the spots.Another thing I wish to add is a sidebar, which will have a list of different sustainability cycles.
 * For example, the food waste management cycle, when clicked on, it specially highlights different places involved in the process, and connect them with green arrow, also providing a detailed description of what takes place where.
 * Another thing I wish to add, is to place QR codes or such on the locations, when scanned they will take to this map, and might even have some hidden easter eggs which will make it more engaging.
+
+# AI Use:
+* Not much AI was used in this. I researched on some tools that can be used. I already knew about React, Vite, Firebase because of a current chat-app project I am doing under "Seasons of Code" program in this summers.
+* Because I am still yet to actually use these tools myself, as still the project is in starting phase, I used AI to learn more about the tools and their uses in brief.
+* Any idea I have mentioned in the answer is solely mine and no AI is used for ideation.

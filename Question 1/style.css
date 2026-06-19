@@ -14,6 +14,8 @@
     4. HERO SECTION
        4a. Hero wrapper & background
        4b. Hero content (heading, subheading)
+           — display:inline-block on the heading spans is required
+             for the GSAP load-in animation in index.html to work
        4c. Rotating quotes carousel
        4d. CTA button & neon glow on hover
     5. HOVER-TRIGGERED REMOTE EFFECTS
@@ -202,11 +204,16 @@ html {
 .glow-text {
     color: var(--green-primary);
     transition: text-shadow 0.4s ease;
+
+    /* inline-block (instead of default inline) so the GSAP slide-in
+       transform in index.html applies cleanly across browsers */
+    display: inline-block;
 }
 
 /* "IIT Bombay" is slightly smaller than "Sustainability Cell" */
 #iitb {
     font-size: 3.1rem;
+    display: inline-block; /* same reason as .glow-text above */
 }
 
 .sub-heading {

@@ -21,7 +21,8 @@
     6. #implementations — Implementations section
     7. #contact       — Contact section
     8. #greenscore    — Green Score section
-    9. <script>       — All JavaScript (4 features, clearly separated)
+    9. GSAP <script>  — Loads the GSAP animation library (CDN)
+   10. <script>       — All JavaScript (5 features, clearly separated)
     ============================================================
 -->
 
@@ -30,6 +31,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sustainability Cell - IIT Bombay</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- GSAP — used only for the hero entrance animation (Feature 5 below).
+         Loaded in <head> so it's ready by the time our script runs;
+         this is just the small core library, no extra plugins needed
+         since this is a one-time load animation, not a scroll-driven one. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 </head>
 
 <body>
@@ -248,6 +255,7 @@
          Feature 2: Parting clouds — move apart + fade on scroll
          Feature 3: Custom smooth scroll — slow "glide" to sections
          Feature 4: Rotating quotes — cycles through an array every 12s
+         Feature 5: GSAP hero entrance — text/button animate in on load
          ===================================================== -->
     <script>
 
@@ -403,6 +411,71 @@
         // Show the first quote immediately, then repeat every 12 seconds
         showNextQuote();
         setInterval(showNextQuote, 12000);
+
+
+        /* ─────────────────────────────────────────────────────────
+           FEATURE 5: GSAP HERO ENTRANCE ANIMATION
+           On page load, the hero content reveals itself piece by
+           piece instead of just appearing all at once.
+
+           WHY gsap.from() INSTEAD OF gsap.to():
+           - .from() reads each element's CURRENT (final) CSS state
+             as the animation's end point, then animates FROM the
+             values we give it back up TO that final state.
+           - This means we never have to manually set "starting"
+             opacity/position values in the CSS file — GSAP handles
+             both ends of the animation right here in one place.
+
+           WHY ONE TIMELINE INSTEAD OF SEPARATE TWEENS:
+           - gsap.timeline() lets multiple .from() calls play in a
+             planned sequence instead of all firing at once.
+           - The second argument on each line (e.g. "-=0.5") means
+             "start this tween 0.5s before the previous one ends" —
+             that's what creates the overlapping, staggered reveal
+             instead of a stiff one-after-another sequence.
+        ───────────────────────────────────────────────────────── */
+        const heroEntrance = gsap.timeline({
+            defaults: { ease: 'power3.out', duration: 0.9 }
+        });
+
+        heroEntrance
+            // 1. Logo drops gently into place from above
+            .from('.nav-logo', { opacity: 0, y: -20 })
+
+            // 1b. Nav tabs slide in from the left, one after another —
+            //     stagger: 0.15 means each <li> starts 0.15s after the
+            //     previous one, instead of all 5 animating together.
+            //     This is what creates the "About, then Events, then
+            //     Implementations..." domino effect.
+            .from('.main-nav li', {
+                opacity: 0,
+                x: -30,
+                stagger: 0.15,
+                duration: 0.5
+            }, '-=0.3')
+
+            // 2. "Sustainability Cell" slides in from the left
+            .from('.glow-text', { opacity: 0, x: -50 }, '-=0.3')
+
+            // 3. "IIT Bombay" follows just behind it, same direction
+            .from('#iitb', { opacity: 0, x: -30 }, '-=0.6')
+
+            // 4. Subheading paragraph fades upward into place
+            .from('.sub-heading', { opacity: 0, y: 20 }, '-=0.5')
+
+            // 5. Quote carousel container fades in
+            //    (the quotes' own slide-in/out classes keep working
+            //    independently once this container is visible)
+            .from('.fun-facts-container', { opacity: 0, y: 15 }, '-=0.4')
+
+            // 6. CTA button scales up with a slight overshoot/bounce —
+            //    back.out(1.7) is what creates that "pop" feeling
+            .from('.button-container', {
+                opacity: 0,
+                scale: 0.85,
+                ease: 'back.out(1.7)',
+                duration: 0.7
+            }, '-=0.3');
 
     </script>
 

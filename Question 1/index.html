@@ -1,5 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<!--
+    ============================================================
+    SUSTAINABILITY CELL — IIT BOMBAY
+    Hero Page  |  index.html
+    ============================================================
+
+    FILE STRUCTURE (in order of appearance):
+    ──────────────────────────────────────────
+    1. <head>         — Page metadata & stylesheet link
+    2. <header>       — Sticky navigation bar with logo
+    3. #hero          — Full-screen hero section with:
+                          • Animated edge vines (SVG)
+                          • Parting clouds (SVG)
+                          • Hero text, rotating quotes & CTA button
+                          • Invisible globe hotspot (for glow effect)
+    4. #about         — About Us section
+    5. #events        — Events section
+    6. #implementations — Implementations section
+    7. #contact       — Contact section
+    8. #greenscore    — Green Score section
+    9. <script>       — All JavaScript (4 features, clearly separated)
+    ============================================================
+-->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,11 +34,19 @@
 
 <body>
 
+    <!-- =====================================================
+         HEADER — Sticky navigation bar
+         Starts transparent, turns white on scroll (via JS).
+         Logo links back to the hero (#hero).
+         ===================================================== -->
     <header class="sticky-header">
+
+        <!-- Logo: clicking it scrolls back to the top of the page -->
         <a href="#hero" class="logo-link">
             <img src="images/Scell-Logo.svg" alt="Sustainability Cell Logo" class="nav-logo">
         </a>
-        
+
+        <!-- Main navigation links — all use the custom slow-scroll (via JS) -->
         <nav class="main-nav">
             <ul>
                 <li><a href="#about">About</a></li>
@@ -23,112 +56,210 @@
                 <li><a href="#greenscore">Green Score</a></li>
             </ul>
         </nav>
+
     </header>
 
+
+    <!-- =====================================================
+         HERO SECTION — Full-screen landing view
+         Contains: vines, clouds, hero text, rotating quotes,
+         CTA button, and the invisible globe hotspot.
+         ===================================================== -->
     <section id="hero" class="hero-wrapper">
 
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - -
+             GLOBE HOTSPOT
+             An invisible circular <a> tag placed over the
+             globe in the background image. Hovering the CTA
+             button (via CSS :has()) reveals its glow effect.
+             Clicking it scrolls down to #greenscore.
+        - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <a href="#greenscore" class="globe-hotspot" id="globe-link"></a>
-        
+
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - -
+             LEFT VINE
+             SVG vine that grows upward from the bottom-left
+             corner when the CTA button is hovered.
+             The stem uses stroke-dashoffset animation;
+             each leaf pops in with a staggered delay.
+        - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <div class="vine-container" id="vine-left">
             <svg viewBox="0 0 100 500" preserveAspectRatio="none" class="vine-svg">
-                <path class="vine-stem" d="M50,500 C80,333 20,166 50,0" fill="transparent" stroke="#8DC63F" stroke-width="3"/>
-                
+                <!-- The main stem path -->
+                <path class="vine-stem" d="M50,500 C80,333 20,166 50,0"
+                      fill="transparent" stroke="#8DC63F" stroke-width="3"/>
+
+                <!-- Leaves — leaf-1 is at the bottom, leaf-7 at the top -->
                 <path class="vine-leaf leaf-1" d="M60,450 Q85,440 75,410 Q50,430 60,450" fill="#8DC63F"/>
                 <path class="vine-leaf leaf-2" d="M65,380 Q90,370 80,340 Q55,360 65,380" fill="#8DC63F"/>
                 <path class="vine-leaf leaf-3" d="M58,300 Q83,290 73,260 Q48,280 58,300" fill="#8DC63F"/>
                 <path class="vine-leaf leaf-4" d="M35,220 Q10,210 20,180 Q45,200 35,220" fill="#8DC63F"/>
                 <path class="vine-leaf leaf-5" d="M30,150 Q5,140 15,110 Q40,130 30,150" fill="#8DC63F"/>
-                <path class="vine-leaf leaf-6" d="M55,80 Q80,70 70,40 Q45,60 55,80" fill="#8DC63F"/>
-                <path class="vine-leaf leaf-7" d="M45,30 Q20,20 30,0 Q55,10 45,30" fill="#8DC63F"/>
-            </svg>
-        </div>
-        
-        <div class="vine-container" id="vine-right">
-            <svg viewBox="0 0 100 500" preserveAspectRatio="none" class="vine-svg">
-                <path class="vine-stem" d="M50,500 C80,333 20,166 50,0" fill="transparent" stroke="#8DC63F" stroke-width="3"/>
-                <path class="vine-leaf leaf-1" d="M60,450 Q85,440 75,410 Q50,430 60,450" fill="#8DC63F"/>
-                <path class="vine-leaf leaf-2" d="M65,380 Q90,370 80,340 Q55,360 65,380" fill="#8DC63F"/>
-                <path class="vine-leaf leaf-3" d="M58,300 Q83,290 73,260 Q48,280 58,300" fill="#8DC63F"/>
-                <path class="vine-leaf leaf-4" d="M35,220 Q10,210 20,180 Q45,200 35,220" fill="#8DC63F"/>
-                <path class="vine-leaf leaf-5" d="M30,150 Q5,140 15,110 Q40,130 30,150" fill="#8DC63F"/>
-                <path class="vine-leaf leaf-6" d="M55,80 Q80,70 70,40 Q45,60 55,80" fill="#8DC63F"/>
-                <path class="vine-leaf leaf-7" d="M45,30 Q20,20 30,0 Q55,10 45,30" fill="#8DC63F"/>
+                <path class="vine-leaf leaf-6" d="M55,80  Q80,70  70,40  Q45,60  55,80"  fill="#8DC63F"/>
+                <path class="vine-leaf leaf-7" d="M45,30  Q20,20  30,0   Q55,10  45,30"  fill="#8DC63F"/>
             </svg>
         </div>
 
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - -
+             RIGHT VINE
+             Identical SVG to vine-left, but CSS flips it
+             horizontally with scaleX(-1) to mirror it.
+        - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <div class="vine-container" id="vine-right">
+            <svg viewBox="0 0 100 500" preserveAspectRatio="none" class="vine-svg">
+                <path class="vine-stem" d="M50,500 C80,333 20,166 50,0"
+                      fill="transparent" stroke="#8DC63F" stroke-width="3"/>
+
+                <path class="vine-leaf leaf-1" d="M60,450 Q85,440 75,410 Q50,430 60,450" fill="#8DC63F"/>
+                <path class="vine-leaf leaf-2" d="M65,380 Q90,370 80,340 Q55,360 65,380" fill="#8DC63F"/>
+                <path class="vine-leaf leaf-3" d="M58,300 Q83,290 73,260 Q48,280 58,300" fill="#8DC63F"/>
+                <path class="vine-leaf leaf-4" d="M35,220 Q10,210 20,180 Q45,200 35,220" fill="#8DC63F"/>
+                <path class="vine-leaf leaf-5" d="M30,150 Q5,140 15,110 Q40,130 30,150" fill="#8DC63F"/>
+                <path class="vine-leaf leaf-6" d="M55,80  Q80,70  70,40  Q45,60  55,80"  fill="#8DC63F"/>
+                <path class="vine-leaf leaf-7" d="M45,30  Q20,20  30,0   Q55,10  45,30"  fill="#8DC63F"/>
+            </svg>
+        </div>
+
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - -
+             CLOUDS
+             Two SVG clouds sit at the bottom of the hero.
+             On scroll, JS pushes them left and right while
+             fading them out — the "parting clouds" effect.
+             cloud-left uses a horizontally-flipped <g> group
+             so both sides look symmetrical.
+        - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <div class="cloud-container">
-            
-            <svg class="cloud-layer cloud-left" id="cloud-left" viewBox="0 0 500 150" preserveAspectRatio="none">
+
+            <!-- Left cloud (SVG group is flipped internally) -->
+            <svg class="cloud-layer cloud-left" id="cloud-left"
+                 viewBox="0 0 500 150" preserveAspectRatio="none">
                 <g transform="translate(500, 0) scale(-1, 1)">
-                    <path d="M0,150 Q30,150 100,90 T300,80 Q400,50 500,80 L500,150 Z" fill="rgba(255,255,255,0.25)"/>
-                    <path d="M0,150 Q50,150 150,60 T320,60 Q420,30 500,60 L500,150 Z" fill="rgba(255,255,255,0.6)"/>
+                    <path d="M0,150 Q30,150 100,90 T300,80 Q400,50 500,80 L500,150 Z"
+                          fill="rgba(255,255,255,0.25)"/>
+                    <path d="M0,150 Q50,150 150,60 T320,60 Q420,30 500,60 L500,150 Z"
+                          fill="rgba(255,255,255,0.6)"/>
                 </g>
             </svg>
 
-            <svg class="cloud-layer cloud-right" id="cloud-right" viewBox="0 0 500 150" preserveAspectRatio="none">
-                <path d="M0,150 Q30,150 100,90 T300,80 Q400,50 500,80 L500,150 Z" fill="rgba(255,255,255,0.25)"/>
-                <path d="M0,150 Q50,150 150,60 T320,60 Q420,30 500,60 L500,150 Z" fill="rgba(255,255,255,0.6)"/>
+            <!-- Right cloud -->
+            <svg class="cloud-layer cloud-right" id="cloud-right"
+                 viewBox="0 0 500 150" preserveAspectRatio="none">
+                <path d="M0,150 Q30,150 100,90 T300,80 Q400,50 500,80 L500,150 Z"
+                      fill="rgba(255,255,255,0.25)"/>
+                <path d="M0,150 Q50,150 150,60 T320,60 Q420,30 500,60 L500,150 Z"
+                      fill="rgba(255,255,255,0.6)"/>
             </svg>
-            
+
         </div>
 
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - -
+             HERO CONTENT — Main text, rotating quotes & CTA
+        - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <div class="hero-content-layout">
 
-                <h1 class="main-heading"><span class="glow-text">Sustainability Cell</span><br><span id="iitb">IIT Bombay</span></h1>
-                <p class="sub-heading">Empowering sustainable practices and environmental consciousness through innovation, education, and action.</p>
-                
-                <div class="fun-facts-container">
-                    <div class="quote-slider" id="quote-slider">
-                        </div>
-                </div>
+            <!-- Main heading: "Sustainability Cell" glows on CTA hover -->
+            <h1 class="main-heading">
+                <span class="glow-text">Sustainability Cell</span><br>
+                <span id="iitb">IIT Bombay</span>
+            </h1>
 
-                <div class="button-container">
-                    <a href="#about" class="learn-more-btn" id="interactive-btn">Explore Our Work</a>
+            <!-- Subheading tagline -->
+            <p class="sub-heading">
+                Empowering sustainable practices and environmental consciousness
+                through innovation, education, and action.
+            </p>
+
+            <!-- Rotating quotes — JS injects quote text here every 12s -->
+            <div class="fun-facts-container">
+                <div class="quote-slider" id="quote-slider">
+                    <!-- Quote text is dynamically inserted by JavaScript -->
                 </div>
+            </div>
+
+            <!-- CTA button — hovering this triggers ALL hover effects on the page -->
+            <div class="button-container">
+                <a href="#about" class="learn-more-btn" id="interactive-btn">
+                    Explore Our Work
+                </a>
+            </div>
 
         </div>
+
     </section>
+
+
+    <!-- =====================================================
+         CONTENT SECTIONS
+         Simple placeholder sections below the hero.
+         Each has a .section-container for max-width & centering.
+         #events and #contact have a light grey background (see CSS).
+         ===================================================== -->
 
     <section id="about">
         <div class="section-container">
             <h2>About Us</h2>
-            <p>The Sustainability Cell at IIT Bombay is a student-driven initiative dedicated to promoting sustainable practices and environmental consciousness within the campus and beyond.</p>
+            <p>The Sustainability Cell at IIT Bombay is a student-driven initiative
+               dedicated to promoting sustainable practices and environmental
+               consciousness within the campus and beyond.</p>
         </div>
     </section>
 
     <section id="events">
         <div class="section-container">
             <h2>Events</h2>
-            <p>Stay updated with our upcoming events and activities focused on sustainability and environmental consciousness.</p>
+            <p>Stay updated with our upcoming events and activities focused on
+               sustainability and environmental consciousness.</p>
         </div>
     </section>
 
     <section id="implementations">
         <div class="section-container">
             <h2>Implementations</h2>
-            <p>Discover the various sustainable initiatives and projects implemented by the Sustainability Cell at IIT Bombay.</p>
+            <p>Discover the various sustainable initiatives and projects implemented
+               by the Sustainability Cell at IIT Bombay.</p>
         </div>
     </section>
 
     <section id="contact">
         <div class="section-container">
             <h2>Contact Us</h2>
-            <p>Get in touch with the Sustainability Cell at IIT Bombay for any inquiries, collaborations, or to join our initiatives.</p>
+            <p>Get in touch with the Sustainability Cell for any inquiries,
+               collaborations, or to join our initiatives.</p>
         </div>
     </section>
 
     <section id="greenscore">
         <div class="section-container">
             <h2>Green Score</h2>
-            <p>Learn about our Green Score initiative, which evaluates and promotes sustainable practices within the campus community.</p>
+            <p>Learn about our Green Score initiative, which evaluates and promotes
+               sustainable practices within the campus community.</p>
         </div>
     </section>
 
 
+    <!-- =====================================================
+         JAVASCRIPT — All interactivity in one place.
+
+         Feature 1: Sticky header — turns white on scroll
+         Feature 2: Parting clouds — move apart + fade on scroll
+         Feature 3: Custom smooth scroll — slow "glide" to sections
+         Feature 4: Rotating quotes — cycles through an array every 12s
+         ===================================================== -->
     <script>
-        // 1. STICKY HEADER SCROLL LOGIC
+
+        /* ─────────────────────────────────────────────────────────
+           FEATURE 1: STICKY HEADER
+           Adds the .scrolled class when user scrolls past 50px.
+           CSS uses that class to switch the header from transparent
+           to a solid white background.
+        ───────────────────────────────────────────────────────── */
+        const header = document.querySelector('.sticky-header');
+
         window.addEventListener('scroll', () => {
-            const header = document.querySelector('.sticky-header');
             if (window.scrollY > 50) {
                 header.classList.add('scrolled');
             } else {
@@ -136,63 +267,109 @@
             }
         });
 
-        // 2. PARTING CLOUDS SCROLL LOGIC
-        const cloudLeft = document.getElementById('cloud-left');
+
+        /* ─────────────────────────────────────────────────────────
+           FEATURE 2: PARTING CLOUDS
+           As the user scrolls down, both cloud SVGs:
+             • Slide outward (left cloud goes further left, right goes right)
+             • Fade out gradually
+           The speed multiplier (4.5) controls how fast they fly apart.
+        ───────────────────────────────────────────────────────── */
+        const cloudLeft  = document.getElementById('cloud-left');
         const cloudRight = document.getElementById('cloud-right');
 
+        const CLOUD_FADE_DISTANCE  = 600; // px of scroll to fully fade out
+        const CLOUD_SPEED_FACTOR   = 4.5; // higher = clouds move apart faster
+
         window.addEventListener('scroll', () => {
-            let scrollPos = window.scrollY;
-            let newOpacity = 1 - (scrollPos / 600);
-            let opacityVal = Math.max(newOpacity, 0);
+            const scrollPos = window.scrollY;
 
-            // Fast parting movement
-            let moveLeft = -(scrollPos * 4.5); 
-            let moveRight = scrollPos * 4.5;   
+            // Opacity goes from 1 → 0 over the first CLOUD_FADE_DISTANCE pixels
+            const opacity = Math.max(1 - (scrollPos / CLOUD_FADE_DISTANCE), 0);
 
-            if (cloudLeft && cloudRight) {
-                cloudLeft.style.opacity = opacityVal;
-                cloudLeft.style.transform = `translateX(${moveLeft}px)`;
-                cloudRight.style.opacity = opacityVal;
-                cloudRight.style.transform = `translateX(${moveRight}px)`;
-            }
+            // How far each cloud has moved horizontally
+            const offset = scrollPos * CLOUD_SPEED_FACTOR;
+
+            cloudLeft.style.opacity   = opacity;
+            cloudLeft.style.transform = `translateX(${-offset}px)`; // moves left
+
+            cloudRight.style.opacity   = opacity;
+            cloudRight.style.transform = `translateX(${offset}px)`;  // moves right
         });
 
-        // 3. CUSTOM SLOW SMOOTH SCROLL (The "glide" effect)
-        function slowSmoothScroll(targetId, duration) {
+
+        /* ─────────────────────────────────────────────────────────
+           FEATURE 3: CUSTOM SMOOTH SCROLL ("Glide" Effect)
+           Native CSS scroll-behavior:smooth is too fast and boring.
+           This replaces it with a slow, eased animation over 1500ms.
+
+           HOW IT WORKS:
+           - Gets the target element's position on the page
+           - Offsets by 90px to account for the fixed header height
+           - Uses requestAnimationFrame to animate window.scrollTo()
+           - easeInOutCubic makes it start slow, accelerate, then slow down
+        ───────────────────────────────────────────────────────── */
+        const SCROLL_DURATION   = 1500; // ms — how long the scroll animation takes
+        const HEADER_OFFSET     = 90;   // px — space to leave for the fixed header
+
+        function slowSmoothScroll(targetId) {
             const target = document.querySelector(targetId);
             if (!target) return;
-            const targetPosition = target.getBoundingClientRect().top + window.scrollY - 90;
-            const startPosition = window.scrollY;
-            const distance = targetPosition - startPosition;
-            let startTime = null;
 
-            function animation(currentTime) {
+            const targetPosition = target.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+            const startPosition  = window.scrollY;
+            const distance       = targetPosition - startPosition;
+            let startTime        = null;
+
+            function step(currentTime) {
                 if (startTime === null) startTime = currentTime;
-                const timeElapsed = currentTime - startTime;
-                const run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
-                window.scrollTo(0, run);
-                if (timeElapsed < duration) requestAnimationFrame(animation);
+
+                const elapsed  = currentTime - startTime;
+                const position = easeInOutCubic(elapsed, startPosition, distance, SCROLL_DURATION);
+
+                window.scrollTo(0, position);
+
+                // Keep animating until the full duration has passed
+                if (elapsed < SCROLL_DURATION) {
+                    requestAnimationFrame(step);
+                }
             }
 
+            // Cubic easing: slow start → fast middle → slow end
+            // t = time elapsed, b = start value, c = change, d = duration
             function easeInOutCubic(t, b, c, d) {
                 t /= d / 2;
-                if (t < 1) return c / 2 * t * t * t + b;
+                if (t < 1) return (c / 2) * t * t * t + b;
                 t -= 2;
-                return c / 2 * (t * t * t + 2) + b;
+                return (c / 2) * (t * t * t + 2) + b;
             }
-            requestAnimationFrame(animation);
+
+            requestAnimationFrame(step);
         }
 
-        // Apply Scroll to Nav Links & Button
+        // Attach the custom scroll to all nav links, the logo, and the CTA button
         document.querySelectorAll('.main-nav a, .logo-link, #interactive-btn').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                e.preventDefault();
+                e.preventDefault(); // stops the browser's default instant jump
+
                 const targetId = this.getAttribute('href') || '#about';
-                slowSmoothScroll(targetId, 1500); 
+                slowSmoothScroll(targetId);
             });
         });
 
-        // 4. ROTATING QUOTES CAROUSEL
+
+        /* ─────────────────────────────────────────────────────────
+           FEATURE 4: ROTATING QUOTES CAROUSEL
+           Cycles through an array of phrases every 12 seconds.
+           Each new quote slides in from the left and fades in
+           using the .slide-out → .slide-in CSS class swap.
+
+           HOW IT WORKS:
+           - Creates a new <div> with class "quote-text slide-out" (invisible, offset)
+           - Appends it to #quote-slider, replacing the previous quote
+           - After a 50ms delay (gives the browser time to render the start state),
+             swaps .slide-out to .slide-in, triggering the CSS transition
+        ───────────────────────────────────────────────────────── */
         const quotes = [
             "Zero Waste Campus",
             "Empowering Innovation",
@@ -201,23 +378,33 @@
             "Leading by Example",
             "Inspiring Change"
         ];
-        const slider = document.getElementById('quote-slider');
-        let quoteIndex = 0;
 
-        function rotateQuotes() {
-            const newQuote = document.createElement('div');
-            newQuote.className = 'quote-text slide-out';
-            newQuote.innerText = quotes[quoteIndex];
-            slider.innerHTML = ''; 
-            slider.appendChild(newQuote);
-            setTimeout(() => newQuote.classList.replace('slide-out', 'slide-in'), 50);
+        const slider     = document.getElementById('quote-slider');
+        let   quoteIndex = 0;
+
+        function showNextQuote() {
+            // Create the quote element in its starting (invisible) state
+            const quoteEl      = document.createElement('div');
+            quoteEl.className  = 'quote-text slide-out';
+            quoteEl.innerText  = quotes[quoteIndex];
+
+            // Replace the current quote with the new one
+            slider.innerHTML = '';
+            slider.appendChild(quoteEl);
+
+            // Small delay lets the browser register the initial slide-out state
+            // before we switch to slide-in, so the CSS transition actually fires
+            setTimeout(() => quoteEl.classList.replace('slide-out', 'slide-in'), 50);
+
+            // Advance to the next quote (wraps back to 0 at the end of the array)
             quoteIndex = (quoteIndex + 1) % quotes.length;
         }
 
-        rotateQuotes();
-        setInterval(rotateQuotes, 12000);
-    </script>
+        // Show the first quote immediately, then repeat every 12 seconds
+        showNextQuote();
+        setInterval(showNextQuote, 12000);
 
+    </script>
 
 </body>
 </html>

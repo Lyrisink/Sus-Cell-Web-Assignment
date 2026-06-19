@@ -1,6 +1,43 @@
-/* =========================================
-   RESET & SMOOTH SCROLLING
-   ========================================= */
+/* ============================================================
+   SUSTAINABILITY CELL — IIT BOMBAY
+   Hero Page  |  style.css
+   ============================================================
+
+   TABLE OF CONTENTS
+   ──────────────────────────────────────────────────────────
+    1. RESET & BASE STYLES
+    2. CSS CUSTOM PROPERTIES (Design Tokens)
+    3. STICKY HEADER
+       3a. Header base styles
+       3b. Logo
+       3c. Navigation links & hover underline
+    4. HERO SECTION
+       4a. Hero wrapper & background
+       4b. Hero content (heading, subheading)
+       4c. Rotating quotes carousel
+       4d. CTA button & neon glow on hover
+    5. HOVER-TRIGGERED REMOTE EFFECTS
+       (CSS :has() selectors that fire when the CTA is hovered)
+       5a. Glow text on heading
+       5b. Logo glow
+       5c. Globe hotspot reveal
+       5d. Vine growth
+    6. INVISIBLE GLOBE HOTSPOT
+    7. EDGE VINE ANIMATIONS
+       7a. Container & SVG
+       7b. Stem draw-on animation
+       7c. Leaf pop-in animation & staggered delays
+    8. PARTING CLOUDS ANIMATION
+    9. CONTENT SECTIONS (Below the hero)
+   ============================================================ */
+
+
+/* ============================================================
+   1. RESET & BASE STYLES
+   Remove default browser margin/padding so we start clean.
+   box-sizing: border-box makes width/height include padding
+   and border, which is almost always what you want.
+   ============================================================ */
 * {
     margin: 0;
     padding: 0;
@@ -8,56 +45,73 @@
 }
 
 html {
-    /* This creates the smooth scroll effect when clicking nav links */
-    /* scroll-behavior: smooth;  */
     font-family: Arial, sans-serif;
+    /* Note: scroll-behavior: smooth is intentionally disabled here.
+       We use a custom JS scroll animation instead (see index.html). */
 }
 
-/* =========================================
-   STICKY HEADER (Transparent to White)
-   ========================================= */
+
+/* ============================================================
+   2. CSS CUSTOM PROPERTIES (Design Tokens)
+   Store colours and shared values in one place.
+   Change a value here and it updates everywhere it's used.
+   ============================================================ */
+:root {
+    --green-primary:   #8DC63F;   /* Main brand green */
+    --green-hover:     #1ebf3d;   /* Darker green for hover states */
+    --blue-text:       #003366;   /* Deep blue used on the CTA button */
+    --text-dark:       #333;      /* Dark text on the white scrolled header */
+    --shadow-light:    rgba(0, 0, 0, 0.1);
+    --glow-green:      rgba(141, 198, 63, 0.5);  /* Semi-transparent green for glows */
+    --glow-green-soft: rgba(141, 198, 63, 0.2);
+}
+
+
+/* ============================================================
+   3. STICKY HEADER
+   The header is fixed at the top of the viewport at all times.
+   It starts transparent (over the hero image) and transitions
+   to solid white once the user scrolls past 50px (via JS).
+   ============================================================ */
+
+/* 3a. Header base styles */
 .sticky-header {
-    position: fixed;
+    position: fixed;         /* Stays at the top of the viewport */
     top: 0;
     left: 0;
     width: 100%;
     display: flex;
     align-items: center;
-    padding: 20px 140px; /* 140px Left padding ensures alignment */
-    z-index: 100; 
+
+    /* 140px left padding keeps the logo/nav aligned with hero text */
+    padding: 20px 140px;
+
+    z-index: 100;            /* Sits above all page content */
+    color: white;            /* White text over the dark hero image */
+    background-color: transparent;
+
+    /* Smooth transition for the scroll state change below */
     transition: background-color 0.4s ease, box-shadow 0.4s ease;
-    background-color: transparent; 
-    color: white; 
 }
 
-/* The class added by JavaScript when scrolled */
+/* When JS detects scroll > 50px, it adds this class */
 .sticky-header.scrolled {
     background-color: white;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    color: #333; /* Changes text dark against white background */
+    box-shadow: 0 4px 15px var(--shadow-light);
+    color: var(--text-dark);  /* Switches text to dark so it's readable on white */
 }
 
-/* Logo and Nav Positioning */
-/* .logo-container {
-    
-    width: 50px;
-    height: 50px;
-    background-color: #ddd; 
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 30px; 
-    
-} */
 
+/* 3b. Logo */
 .nav-logo {
-    height: 55px; /* Adjust this number if your logo is too big/small */
+    height: 55px;
     width: auto;
-    margin-right: 40px; /* Space between logo and nav links */
-    transition: filter 0.4s ease;
+    margin-right: 40px;
+    transition: filter 0.4s ease; /* Needed for the glow effect (see Section 5b) */
 }
 
+
+/* 3c. Navigation links & animated underline on hover */
 .main-nav ul {
     display: flex;
     list-style: none;
@@ -66,220 +120,265 @@ html {
 
 .main-nav a {
     text-decoration: none;
-    color: inherit;
+    color: inherit;          /* Inherits white (transparent header) or dark (scrolled) */
     font-weight: bold;
     font-size: 1.1rem;
-    position: relative; /* Required for the underline positioning */
     padding-bottom: 5px;
+
+    /* position: relative is required so the ::after pseudo-element
+       can be positioned relative to the link text */
+    position: relative;
+
     transition: color 0.3s ease;
 }
 
 .main-nav a:hover {
-    color: #8DC63F; /* Sustainability Green */
+    color: var(--green-primary);
 }
 
+/* The animated underline:
+   We create it with a pseudo-element that starts at zero width,
+   then expands to full width on hover using transform: scaleX(). */
 .main-nav a::after {
     content: '';
     position: absolute;
-    width: 100%;
-    height: 3px;
     bottom: 0;
     left: 0;
-    background-color: #8DC63F;
-    transform: scaleX(0); /* Squishes it to 0 width */
-    transform-origin: bottom left; /* Makes it grow from left to right */
+    width: 100%;
+    height: 3px;
+    background-color: var(--green-primary);
+
+    transform: scaleX(0);           /* Invisible at rest (squished to 0 width) */
+    transform-origin: bottom left;  /* Grows from the left side */
     transition: transform 0.3s ease-out;
 }
 
 .main-nav a:hover::after {
-    transform: scaleX(1); /* Expands it to full width */
+    transform: scaleX(1);           /* Full width on hover */
 }
 
-/* =========================================
-   HERO SECTION & BACKGROUND
-   ========================================= */
+
+/* ============================================================
+   4. HERO SECTION
+   Full-screen section with the background image.
+   Content is left-aligned, vertically centered.
+   ============================================================ */
+
+/* 4a. Hero wrapper & background */
 .hero-wrapper {
-    height: 100vh;
+    height: 100vh;               /* Full viewport height */
     width: 100%;
     background-image: url('https://gymkhana.iitb.ac.in/~sustainabilitycell/images/main-background.webp');
     background-size: cover;
     background-position: center;
-    position: relative;
+
+    position: relative;          /* Required for absolute children (vines, clouds, hotspot) */
     display: flex;
-    align-items: center; 
-    padding: 0 140px; /* Matches the 140px left padding of the header */
+    align-items: center;
+
+    /* Must match the header's left padding for visual alignment */
+    padding: 0 140px;
 }
 
+/* 4b. Hero content */
 .hero-content-layout {
     max-width: 600px;
-    margin-top: -80px; /* Moves content up to make room for rotating text */
     color: white;
+
+    /* Shifts content slightly upward to leave breathing room
+       for the rotating quotes below the subheading */
+    margin-top: -80px;
 }
 
 .main-heading {
     font-size: 3.8rem;
-    font-weight: 900; /* Makes the text horizontally thicker */
+    font-weight: 900;
     line-height: 1.2;
     margin-bottom: 15px;
-    color: white; /* "Sustainability Cell" is now white */
+    color: white;
 }
 
-/* The text we want to glow later */
+/* "Sustainability Cell" in green — also receives the glow on CTA hover */
 .glow-text {
-    color: #8DC63F; /* "IIT Bombay" is now green */
+    color: var(--green-primary);
     transition: text-shadow 0.4s ease;
 }
 
-.sub-heading {
-    font-size: 1.4rem; /* Slightly larger for better readability */
-    line-height: 1.5;
-    margin-bottom: 15px; /* Tightened from 20px */
-}
-
+/* "IIT Bombay" is slightly smaller than "Sustainability Cell" */
 #iitb {
     font-size: 3.1rem;
 }
 
-/* =========================================
-   ROTATING FUN FACTS (Quote Style)
-   ========================================= */
-/* Container holds the quote */
+.sub-heading {
+    font-size: 1.4rem;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+
+/* 4c. Rotating quotes carousel */
 .fun-facts-container {
-    height: 80px; 
-    overflow: hidden;
+    height: 80px;           /* Fixed height prevents layout shift when quotes change */
+    overflow: hidden;       /* Hides the quote while it's in the slide-out position */
     position: relative;
     color: white;
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-    
-    /* ADD THIS: Closes the gap above and below */
-    margin-top: 10px; 
-    margin-bottom: 10px; 
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .quote-text {
     font-family: 'Georgia', serif;
     font-style: italic;
     font-size: 1.2rem;
-    position: absolute;
+
+    position: absolute;     /* Needed so quotes can overlap during the transition */
     width: 100%;
-    /* Slide + Fade Animation */
+
+    /* The actual animation — controlled by the slide-in/slide-out classes below */
     transition: opacity 1s ease, transform 1s ease;
 }
 
-/* The Curly Quotes */
-.quote-text::before { content: '“'; font-size: 2rem; vertical-align: middle; margin-right: 5px; }
-.quote-text::after { content: '”'; font-size: 2rem; vertical-align: middle; margin-left: 5px; }
+/* Decorative curly quotes added via CSS pseudo-elements */
+.quote-text::before { content: '"'; font-size: 2rem; vertical-align: middle; margin-right: 5px; }
+.quote-text::after  { content: '"'; font-size: 2rem; vertical-align: middle; margin-left: 5px; }
 
-/* States for the slide animation */
+/* Initial (hidden) state: offset to the left and invisible */
 .slide-out { opacity: 0; transform: translateX(-50px); }
-.slide-in { opacity: 1; transform: translateX(0); }
 
-/* =========================================
-   LEARN MORE BUTTON & NEON HOVER
-   ========================================= */
+/* Final (visible) state: in place and fully opaque */
+.slide-in  { opacity: 1; transform: translateX(0); }
+
+
+/* 4d. CTA Button */
 .button-container {
-    margin-top: -30px; /* Adjust this to move the button up or down */
+    margin-top: -30px;   /* Tucks the button up closer to the quote area */
 }
 
 .learn-more-btn {
-    background-color: #8DC63F; /* Green */
-    color: #003366; /* Blue text */
+    display: inline-block;
+    text-decoration: none;
     padding: 12px 30px;
     font-size: 1.1rem;
     font-weight: bold;
-    border: 2px solid transparent;
     border-radius: 25px;
     cursor: pointer;
+
+    background-color: var(--green-primary);
+    color: var(--blue-text);
+    border: 2px solid transparent;
+
     transition: all 0.4s ease;
-    text-decoration: none; 
-    display: inline-block;
 }
 
 .learn-more-btn:hover {
-    background-color: #1ebf3d;
-    color: #000000;
-    border-color: #1ebf3d; /* Darker green border on hover */
-    /* Toned down: smaller blur radius and lower opacity */
-    box-shadow: 0 0 8px rgba(141, 198, 63, 0.5), inset 0 0 5px rgba(141, 198, 63, 0.2);
+    background-color: var(--green-hover);
+    color: #000;
+    border-color: var(--green-hover);
+
+    /* Subtle neon glow: outer glow + inner glow */
+    box-shadow: 0 0 8px var(--glow-green), inset 0 0 5px var(--glow-green-soft);
 }
 
-/* THE REMOTE CONTROL GLOW EFFECT
-   When the button inside the hero-wrapper is hovered, 
-   target the .glow-text and apply a shadow!
-*/
+
+/* ============================================================
+   5. HOVER-TRIGGERED REMOTE EFFECTS
+   These use the CSS :has() selector — a modern CSS feature
+   that lets a parent/ancestor react to what a child is doing.
+
+   PATTERN:  body:has(.learn-more-btn:hover) .target { ... }
+   MEANING:  "When .learn-more-btn is hovered anywhere in body,
+              apply these styles to .target"
+
+   This is how hovering ONE button triggers effects on multiple
+   other elements across the page — no JavaScript needed!
+   ============================================================ */
+
+/* 5a. Glow on the "Sustainability Cell" heading text */
 .hero-wrapper:has(.learn-more-btn:hover) .glow-text {
-    /* Toned down: Smaller radius and 60%/40% opacity instead of solid color */
-    text-shadow: 0 0 10px rgba(141, 198, 63, 0.6), 0 0 20px rgba(141, 198, 63, 0.4);
+    text-shadow:
+        0 0 10px rgba(141, 198, 63, 0.6),
+        0 0 20px rgba(141, 198, 63, 0.4);
 }
 
+/* 5b. Glow on the logo SVG
+   We use drop-shadow (not box-shadow) because drop-shadow
+   follows the actual shape of the image, not its bounding box. */
 body:has(.learn-more-btn:hover) .nav-logo {
-    /* Uses drop-shadow so the glow wraps around the shape of the leaf/text */
     filter: drop-shadow(0 0 10px rgba(141, 198, 63, 0.8));
 }
 
-/* =========================================
-   INVISIBLE GLOBE HOTSPOT GLOW
-   ========================================= */
-.globe-hotspot {
-    position: absolute;
-    right: 8%; 
-    top: 43.2%;
-    transform: translateY(-50%);
-    width: 35vw; 
-    aspect-ratio: 1 / 1; 
-    border-radius: 50%;
-    
-    /* CRITICAL CHANGES HERE */
-    cursor: pointer; 
-    display: block; 
-    
-    transition: all 0.5s ease;
-    opacity: 0; 
-}
-
-/* THE REMOTE GLOW TRIGGER */
+/* 5c. Globe hotspot becomes visible (see Section 6) */
 body:has(.learn-more-btn:hover) .globe-hotspot {
     opacity: 1;
-    /* The inner glow */
     background: radial-gradient(circle, rgba(141, 198, 63, 0.15) 0%, rgba(141, 198, 63, 0) 70%);
-    /* The outer glow */
     box-shadow: 0 0 90px 40px rgba(141, 198, 63, 0.2);
 }
-/* =========================================
-   STANDARD CONTENT SECTIONS (For Scrolling)
-   ========================================= */
-section {
-    padding: 100px 50px;
-    min-height: 50vh;
+
+/* 5d. Vine stem draws itself upward */
+body:has(.learn-more-btn:hover) .vine-stem {
+    stroke-dashoffset: 0;  /* Animates from 600 → 0 (see Section 7b) */
 }
 
-.section-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    font-size: 1.2rem;
-    line-height: 1.6;
+/* 5d. Vine leaves pop into view with staggered delays */
+body:has(.learn-more-btn:hover) .vine-leaf {
+    transform: scale(1);
+    opacity: 1;
 }
 
-/* Alternating background colors just to visualize the scroll */
-#events, #contact { background-color: #f9f9f9; }
+/* Each leaf gets a delay timed to when the stem reaches it */
+body:has(.learn-more-btn:hover) .leaf-1 { transition-delay: 0.15s; }
+body:has(.learn-more-btn:hover) .leaf-2 { transition-delay: 0.30s; }
+body:has(.learn-more-btn:hover) .leaf-3 { transition-delay: 0.50s; }
+body:has(.learn-more-btn:hover) .leaf-4 { transition-delay: 0.70s; }
+body:has(.learn-more-btn:hover) .leaf-5 { transition-delay: 0.90s; }
+body:has(.learn-more-btn:hover) .leaf-6 { transition-delay: 1.10s; }
+body:has(.learn-more-btn:hover) .leaf-7 { transition-delay: 1.25s; }
 
-/* =========================================
-   EDGE VINES ANIMATION (Lush Blooming Effect)
-   ========================================= */
+
+/* ============================================================
+   6. INVISIBLE GLOBE HOTSPOT
+   A clickable circular element layered over the globe in the
+   background image. Invisible by default; glows on CTA hover
+   (see Section 5c). aspect-ratio: 1/1 keeps it a perfect circle.
+   ============================================================ */
+.globe-hotspot {
+    position: absolute;
+    right: 8%;
+    top: 43.2%;
+    transform: translateY(-50%);
+
+    width: 35vw;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+
+    display: block;
+    cursor: pointer;
+    opacity: 0;                     /* Invisible until hovered (see Section 5c) */
+    transition: all 0.5s ease;
+}
+
+
+/* ============================================================
+   7. EDGE VINE ANIMATIONS
+   SVG vines grow up from both bottom corners on CTA hover.
+   The right vine (#vine-right) is just the left vine mirrored
+   using scaleX(-1) in CSS — no need for separate SVG paths.
+   ============================================================ */
+
+/* 7a. Container & SVG setup */
 .vine-container {
     position: absolute;
     bottom: 0;
-    width: 60px; 
-    height: 65vh; 
-    pointer-events: none; 
-    z-index: 2; 
+    width: 60px;
+    height: 65vh;
+
+    pointer-events: none;  /* Clicks pass through — it's a decoration */
+    z-index: 2;
 }
 
-#vine-left { left: 0; }
-#vine-right { 
-    right: 0; 
-    transform: scaleX(-1); 
-}
+#vine-left  { left: 0; }
+#vine-right { right: 0; transform: scaleX(-1); }  /* Mirror of the left vine */
 
 .vine-svg {
     width: 100%;
@@ -287,71 +386,96 @@ section {
     filter: drop-shadow(0 0 5px rgba(141, 198, 63, 0.5));
 }
 
+
+/* 7b. Stem draw-on animation
+   stroke-dasharray sets the total dash length equal to the path length.
+   stroke-dashoffset shifts it so the entire dash is hidden at first.
+   Animating dashoffset to 0 "draws" the stroke into view. */
 .vine-stem {
     stroke-dasharray: 600;
-    stroke-dashoffset: 600; 
+    stroke-dashoffset: 600;    /* Fully hidden — no stroke visible */
     transition: stroke-dashoffset 1.3s ease-in-out;
+    /* Hover state sets dashoffset → 0, revealing the full stroke */
 }
 
+
+/* 7c. Leaf pop-in animation
+   Leaves start scaled to 0 (invisible). On hover they scale to 1.
+   transform-origin must match each leaf's anchor point in the SVG
+   so they "grow" from the right spot on the stem. */
 .vine-leaf {
-    transform: scale(0); 
+    transform: scale(0);
     opacity: 0;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease-in;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                opacity 0.3s ease-in;
+    /* cubic-bezier gives a slight overshoot — the leaf bounces as it pops in */
 }
 
-/* Hinge points for all 7 leaves based on their exact coordinates */
+/* Transform origins match the starting corner of each leaf path in the SVG */
 .leaf-1 { transform-origin: 60px 450px; }
 .leaf-2 { transform-origin: 65px 380px; }
 .leaf-3 { transform-origin: 58px 300px; }
 .leaf-4 { transform-origin: 35px 220px; }
 .leaf-5 { transform-origin: 30px 150px; }
-.leaf-6 { transform-origin: 55px 80px; }
-.leaf-7 { transform-origin: 45px 30px; }
+.leaf-6 { transform-origin: 55px 80px;  }
+.leaf-7 { transform-origin: 45px 30px;  }
 
-/* THE REMOTE TRIGGERS */
-body:has(.learn-more-btn:hover) .vine-stem {
-    stroke-dashoffset: 0; 
-}
 
-body:has(.learn-more-btn:hover) .vine-leaf {
-    transform: scale(1);
-    opacity: 1;
-}
-
-/* 7 Sequential Delays perfectly timed to the stem's growth */
-body:has(.learn-more-btn:hover) .leaf-1 { transition-delay: 0.15s; }
-body:has(.learn-more-btn:hover) .leaf-2 { transition-delay: 0.3s; }
-body:has(.learn-more-btn:hover) .leaf-3 { transition-delay: 0.5s; }
-body:has(.learn-more-btn:hover) .leaf-4 { transition-delay: 0.7s; }
-body:has(.learn-more-btn:hover) .leaf-5 { transition-delay: 0.9s; }
-body:has(.learn-more-btn:hover) .leaf-6 { transition-delay: 1.1s; }
-body:has(.learn-more-btn:hover) .leaf-7 { transition-delay: 1.25s; }
-
-/* =========================================
-   PARTING CLOUDS ANIMATION (Refined)
-   ========================================= */
+/* ============================================================
+   8. PARTING CLOUDS ANIMATION
+   Two SVG clouds sit at the very bottom of the hero.
+   JavaScript moves them apart and fades them on scroll.
+   overflow: hidden on .cloud-container clips them as they move off-screen.
+   ============================================================ */
 .cloud-container {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 60px; /* REDUCED: Keeps clouds lower on the screen */
-    pointer-events: none;
-    z-index: 5;
-    overflow: hidden; 
+    height: 60px;
+
+    pointer-events: none;  /* Decorative only */
+    z-index: 5;            /* In front of vines */
+    overflow: hidden;      /* Hides the clouds as they slide out of frame */
 }
 
 .cloud-layer {
-    height: 100%;
-    width: 55%; 
     position: absolute;
-    bottom: -5px; 
+    bottom: -5px;   /* Slight overlap with the bottom edge to hide the gap */
+    height: 100%;
+    width: 55%;     /* Each cloud covers just over half the width */
 }
 
-/* FIX: Targeting the path directly removes the rectangular box glitch */
+/* Using path filter instead of element filter prevents
+   the rectangular white box artifact that can appear otherwise */
 .cloud-layer path {
     filter: drop-shadow(0 -8px 10px rgba(255, 255, 255, 0.4));
 }
 
-.cloud-left { left: 0; }
+.cloud-left  { left: 0; }
 .cloud-right { right: 0; }
+
+
+/* ============================================================
+   9. CONTENT SECTIONS (Below the hero)
+   Basic layout for the placeholder sections that follow the hero.
+   Alternating background colours (white / light grey) give a
+   clear visual break between sections as the user scrolls.
+   ============================================================ */
+section {
+    padding: 100px 50px;
+    min-height: 50vh;
+}
+
+.section-container {
+    max-width: 1000px;
+    margin: 0 auto;      /* Centers the content block horizontally */
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+/* Light grey background on alternating sections */
+#events,
+#contact {
+    background-color: #f9f9f9;
+}

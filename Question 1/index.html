@@ -414,68 +414,62 @@
 
 
         /* ─────────────────────────────────────────────────────────
-           FEATURE 5: GSAP HERO ENTRANCE ANIMATION
-           On page load, the hero content reveals itself piece by
-           piece instead of just appearing all at once.
-
-           WHY gsap.from() INSTEAD OF gsap.to():
-           - .from() reads each element's CURRENT (final) CSS state
-             as the animation's end point, then animates FROM the
-             values we give it back up TO that final state.
-           - This means we never have to manually set "starting"
-             opacity/position values in the CSS file — GSAP handles
-             both ends of the animation right here in one place.
-
-           WHY ONE TIMELINE INSTEAD OF SEPARATE TWEENS:
-           - gsap.timeline() lets multiple .from() calls play in a
-             planned sequence instead of all firing at once.
-           - The second argument on each line (e.g. "-=0.5") means
-             "start this tween 0.5s before the previous one ends" —
-             that's what creates the overlapping, staggered reveal
-             instead of a stiff one-after-another sequence.
+           FEATURE 5: GSAP HERO ENTRANCE ANIMATION (PARALLEL CHAINS)
+           On page load, the hero content reveals itself piece by piece.
+           
+           To reduce overall load-in time while keeping the smooth 
+           sequential feel, the animation is split into TWO parallel 
+           timelines. Both timelines start automatically at the exact 
+           same time, running their own cascading sequences simultaneously.
         ───────────────────────────────────────────────────────── */
-        const heroEntrance = gsap.timeline({
+        
+        // ==========================================
+        // CHAIN 1: Navigation Bar Sequence
+        // ==========================================
+        const navEntrance = gsap.timeline({
             defaults: { ease: 'power3.out', duration: 0.9 }
         });
 
-        heroEntrance
+        navEntrance
             // 1. Logo drops gently into place from above
             .from('.nav-logo', { opacity: 0, y: -20 })
 
-            // 1b. Nav tabs slide in from the left, one after another —
-            //     stagger: 0.15 means each <li> starts 0.15s after the
-            //     previous one, instead of all 5 animating together.
-            //     This is what creates the "About, then Events, then
-            //     Implementations..." domino effect.
+            // 2. Nav tabs slide in from the left, one after another
             .from('.main-nav li', {
                 opacity: 0,
                 x: -30,
                 stagger: 0.15,
                 duration: 0.5
-            }, '-=0.3')
+            }, '-=0.3');
 
-            // 2. "Sustainability Cell" slides in from the left
-            .from('.glow-text', { opacity: 0, x: -50 }, '-=0.3')
 
-            // 3. "IIT Bombay" follows just behind it, same direction
-            .from('#iitb', { opacity: 0, x: -30 }, '-=0.6')
+        // ==========================================
+        // CHAIN 2: Body Content Sequence
+        // ==========================================
+        const bodyEntrance = gsap.timeline({
+            defaults: { ease: 'power3.out', duration: 0.9 }
+        });
 
-            // 4. Subheading paragraph fades upward into place
-            .from('.sub-heading', { opacity: 0, y: 20 }, '-=0.5')
+        bodyEntrance
+            // 1. "Sustainability Cell" slides in from the left 
+            .from('.glow-text', { opacity: 0, x: -50 })
 
-            // 5. Quote carousel container fades in
-            //    (the quotes' own slide-in/out classes keep working
-            //    independently once this container is visible)
-            .from('.fun-facts-container', { opacity: 0, y: 15 }, '-=0.4')
+            // 2. Changed overlap from -=0.6 to -=0.7
+            .from('#iitb', { opacity: 0, x: -30 }, '-=0.7')
 
-            // 6. CTA button scales up with a slight overshoot/bounce —
-            //    back.out(1.7) is what creates that "pop" feeling
+            // 3. Changed overlap from -=0.5 to -=0.7
+            .from('.sub-heading', { opacity: 0, y: 20 }, '-=0.7')
+
+            // 4. Changed overlap from -=0.4 to -=0.7
+            .from('.fun-facts-container', { opacity: 0, y: 15 }, '-=0.7')
+
+            // 5. Changed overlap from -=0.3 to -=0.5
             .from('.button-container', {
                 opacity: 0,
                 scale: 0.85,
                 ease: 'back.out(1.7)',
                 duration: 0.7
-            }, '-=0.3');
+            }, '-=0.5');
 
     </script>
 

@@ -27,3 +27,24 @@ For this, I have used AI in doing certain things. Ideating and deciding all the 
 * Also, after it provided the base HTML structure, I made changes to it accordingly, assigning proper classes and ids to different elements.
 * Then I again used AI for making a base CSS structure file on top of this HTML file, and then myself made changes to it accordingly. Majority of this was to save as much time as possible and invest more time in actual thinking process.
 * One thing I heavily used AI for was to add Javascript to it, because I lack the ample knowledge for it as of now. But also due to other project I have to work on, and this, I am gaining knowledge of it.
+
+
+# Round 2 
+
+## Extra Changes I Included:
+Based on the feedback in interview, I implemented some changes to it. It still has the same essence, because I've tried to keep it as clean as possible, and actually make it more user friendly. Adding too much or any heavy animations would have killed its minimalistic design. Based on this, I did the following changes over the previous one:
+* Added GSAP animation to all content text on hero page. Made two separate timelines, one for the navigation bar and one for body elements. Both start simultaneously when page is loaded/reloaded, each element sliding and fading in one after another. Both timelines take almost same time, and are pretty quick. Provides a more lively effect to the hero page.
+* Added media query in CSS file so that the hero page doesn't appear bad on smaller/mobile devices. Adjusted the nav bar at top of page, wrapped nav elements on it, aligned body to centre, removed svg vine animation and invisible globe hotspot, which ultimately make the hero page very clean on mobile devices. 
+
+## Final List of all changes compared to original page:
+
+* Fixed navigation bar by moving to left
+* Improved body text design
+* Rotating quote-like text added
+* Improved Learn more button - changed to "Explore our Work", enhanced hover effect on button, hovering also glows cell logo, sus cell headline and globe image. Hovering also grows vine with leaves on either side of the page.
+* Subtle clouds on bottom which curtain-open when scrolled down.
+* Added custom scroll effect.
+* Added slide in/fade in animation to text using GSAP.
+* Added media query for mobile devices.
+
+In and all, I've done design changes, hover-based changes/ animations, custom-scroll/ motion effects, animated text, and glow effects. I by choice did not add any constant background animation as the page might look cluttered then. I've redisgned it rom the perspective that it can actually be implemented on the original website rather than just seeing it from assignment point of view.

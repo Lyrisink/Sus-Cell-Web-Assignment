@@ -11,11 +11,15 @@
     ──────────────────────────────────────────
     1. <head>         — Page metadata & stylesheet link
     2. <header>       — Sticky navigation bar with logo
+                          • Stacks vertically on mobile (≤768px)
+                          • Nav links wrap & centre on small screens
     3. #hero          — Full-screen hero section with:
-                          • Animated edge vines (SVG)
+                          • Animated edge vines (SVG) — hidden on mobile
                           • Parting clouds (SVG)
                           • Hero text, rotating quotes & CTA button
+                            (centre-aligned on mobile)
                           • Invisible globe hotspot (for glow effect)
+                            — disabled on mobile
     4. #about         — About Us section
     5. #events        — Events section
     6. #implementations — Implementations section
@@ -23,6 +27,12 @@
     8. #greenscore    — Green Score section
     9. GSAP <script>  — Loads the GSAP animation library (CDN)
    10. <script>       — All JavaScript (5 features, clearly separated)
+
+    RESPONSIVE DESIGN:
+    ──────────────────────────────────────────
+    Mobile breakpoint at ≤768px is handled entirely in style.css
+    (Section 10). No JS changes were needed — the GSAP entrance
+    animation and scroll features work correctly on mobile as-is.
     ============================================================
 -->
 
@@ -196,6 +206,17 @@
 
         </div>
 
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - -
+             FIREFLY CANVAS
+             A full-hero <canvas> element layered behind the
+             content but above the background image.
+             JavaScript (Feature 6) draws and animates all
+             firefly particles on this canvas each frame.
+             pointer-events: none (set in CSS) ensures clicks
+             pass through to buttons and links underneath.
+        - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <canvas id="firefly-canvas"></canvas>
+
     </section>
 
 
@@ -256,6 +277,7 @@
          Feature 3: Custom smooth scroll — slow "glide" to sections
          Feature 4: Rotating quotes — cycles through an array every 12s
          Feature 5: GSAP hero entrance — text/button animate in on load
+         Feature 6: Fireflies canvas — drifting glowing particles over hero
          ===================================================== -->
     <script>
 
@@ -470,6 +492,123 @@
                 ease: 'back.out(1.7)',
                 duration: 0.7
             }, '-=0.5');
+
+        /* ─────────────────────────────────────────────────────────
+           FEATURE 6: FIREFLIES CANVAS ANIMATION
+           Draws 55 glowing green particles on a <canvas> that
+           sits over the hero background image. Each firefly:
+             • Drifts slowly in a randomised direction
+             • Pulses in brightness using a sine wave (so it
+               appears to glow and dim naturally)
+             • Wraps around to the opposite edge when it exits
+               the canvas bounds — no fireflies ever disappear
+
+           HOW IT WORKS:
+           - Each firefly stores position (x, y), velocity (vx, vy),
+             a phase offset for the pulse, and a base opacity.
+           - requestAnimationFrame drives the loop — no setInterval.
+           - Canvas is resized to match the hero on load and on
+             window resize (ResizeObserver) so it always fits.
+           - z-index: 1 in CSS puts it above the background but
+             below the hero content (z-index 2+).
+           - On mobile (≤768px) the count is halved to 28 to
+             keep performance smooth on lower-end phones.
+        ───────────────────────────────────────────────────────── */
+        (function () {
+            const canvas = document.getElementById('firefly-canvas');
+            const ctx    = canvas.getContext('2d');
+            const hero   = document.getElementById('hero');
+
+            // ── Tuneable constants ──────────────────────────────
+            const FIREFLY_COUNT    = window.innerWidth <= 768 ? 28 : 55;
+            const MAX_RADIUS       = 2.2;   // max dot size in px
+            const MIN_RADIUS       = 0.8;   // min dot size in px
+            const MAX_SPEED        = 0.45;  // max drift speed (px per frame)
+            const PULSE_SPEED      = 0.018; // how fast brightness pulses
+            const GLOW_BLUR        = 8;     // canvas shadowBlur for the glow
+            const FIREFLY_COLOR    = '141, 198, 63'; // brand green (R,G,B)
+            // ────────────────────────────────────────────────────
+
+            // Resize the canvas to exactly match the hero section
+            function resizeCanvas() {
+                canvas.width  = hero.offsetWidth;
+                canvas.height = hero.offsetHeight;
+            }
+
+            // Build one firefly with randomised properties
+            function createFirefly() {
+                const angle = Math.random() * Math.PI * 2; // random drift angle
+                const speed = (0.1 + Math.random() * MAX_SPEED);
+                return {
+                    x:       Math.random() * canvas.width,
+                    y:       Math.random() * canvas.height,
+                    vx:      Math.cos(angle) * speed,   // x component of velocity
+                    vy:      Math.sin(angle) * speed,   // y component of velocity
+                    radius:  MIN_RADIUS + Math.random() * (MAX_RADIUS - MIN_RADIUS),
+                    phase:   Math.random() * Math.PI * 2, // stagger the pulse cycles
+                    baseOpacity: 0.4 + Math.random() * 0.4 // each fly has own base brightness
+                };
+            }
+
+            // Initialise all fireflies
+            resizeCanvas();
+            let fireflies = Array.from({ length: FIREFLY_COUNT }, createFirefly);
+
+            // Main animation loop — called every frame by the browser
+            function animate() {
+                // Clear the previous frame
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                fireflies.forEach(f => {
+
+                    // ── Move ──────────────────────────────────────
+                    f.x += f.vx;
+                    f.y += f.vy;
+
+                    // Wrap around edges so fireflies never disappear
+                    if (f.x < 0)             f.x = canvas.width;
+                    if (f.x > canvas.width)  f.x = 0;
+                    if (f.y < 0)             f.y = canvas.height;
+                    if (f.y > canvas.height) f.y = 0;
+
+                    // ── Pulse ─────────────────────────────────────
+                    // sine wave oscillates between 0 and 1;
+                    // multiply by baseOpacity so dull flies stay dull
+                    f.phase += PULSE_SPEED;
+                    const pulse   = (Math.sin(f.phase) + 1) / 2; // 0 → 1
+                    const opacity = f.baseOpacity * pulse;
+
+                    // ── Draw ──────────────────────────────────────
+                    ctx.save();
+
+                    // Soft outer glow
+                    ctx.shadowColor = `rgba(${FIREFLY_COLOR}, ${opacity})`;
+                    ctx.shadowBlur  = GLOW_BLUR;
+
+                    // Solid dot in the centre
+                    ctx.beginPath();
+                    ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${FIREFLY_COLOR}, ${opacity})`;
+                    ctx.fill();
+
+                    ctx.restore();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            // Restart loop
+            animate();
+
+            // Keep canvas sized correctly if the window is resized
+            // (e.g. rotating a phone, or resizing a desktop browser)
+            new ResizeObserver(() => {
+                resizeCanvas();
+                // Re-randomise positions so fireflies don't cluster
+                // in the old bounds after a large resize
+                fireflies = Array.from({ length: FIREFLY_COUNT }, createFirefly);
+            }).observe(hero);
+        })();
 
     </script>
 

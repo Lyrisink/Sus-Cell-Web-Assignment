@@ -30,11 +30,12 @@
        7b. Stem draw-on animation
        7c. Leaf pop-in animation & staggered delays
     8. PARTING CLOUDS ANIMATION
-    9. CONTENT SECTIONS (Below the hero)
-   10. MOBILE RESPONSIVE STYLES (≤768px)
-       10a. Header — stacked logo + wrapping nav
-       10b. Hero — centred text, tighter padding
-       10c. Content sections — smaller padding & font sizes
+    9. FIREFLY CANVAS
+   10. CONTENT SECTIONS (Below the hero)
+   11. MOBILE RESPONSIVE STYLES (≤768px)
+       11a. Header — stacked logo + wrapping nav
+       11b. Hero — centred text, tighter padding
+       11c. Content sections — smaller padding & font sizes
    ============================================================ */
 
 
@@ -468,7 +469,41 @@ body:has(.learn-more-btn:hover) .leaf-7 { transition-delay: 1.25s; }
 
 
 /* ============================================================
-   9. CONTENT SECTIONS (Below the hero)
+   9. FIREFLY CANVAS
+   A <canvas> element that fills the entire hero section and
+   sits just above the background image but below all content.
+
+   z-index layering within .hero-wrapper (position: relative):
+     background image  → implicit z-index 0 (the CSS background-image)
+     #firefly-canvas   → z-index 1  (fireflies, drawn by JS)
+     .vine-container   → z-index 2  (SVG vines)
+     .cloud-container  → z-index 5  (SVG clouds)
+     .hero-content-layout → z-index 10 (text, quotes, CTA button)
+
+   pointer-events: none is critical — without it the canvas
+   would swallow all mouse/touch events and make the CTA button
+   and globe hotspot unclickable.
+   ============================================================ */
+#firefly-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    z-index: 1;            /* Above the CSS background image, below everything else */
+    pointer-events: none;  /* Clicks pass straight through to elements below */
+}
+
+/* Ensure hero content sits above the canvas */
+.hero-content-layout {
+    position: relative;
+    z-index: 10;
+}
+
+
+/* ============================================================
+   10. CONTENT SECTIONS (Below the hero)
    Basic layout for the placeholder sections that follow the hero.
    Alternating background colours (white / light grey) give a
    clear visual break between sections as the user scrolls.
@@ -493,7 +528,7 @@ section {
 
 
 /* ============================================================
-   10. MOBILE RESPONSIVE STYLES (≤768px)
+   11. MOBILE RESPONSIVE STYLES (≤768px)
    Applied when the viewport is phone-sized (up to 768px wide).
 
    Key goals:
@@ -502,12 +537,13 @@ section {
      • Padding and font sizes scale down for small displays
      • Vines hidden (too narrow to look good on phone)
      • Globe hotspot disabled (layout change makes it irrelevant)
+     • Firefly count halved (handled in JS via window.innerWidth check)
    ============================================================ */
 
 @media (max-width: 768px) {
 
     /* ----------------------------------------------------------
-       10a. HEADER — stacked logo + wrapping nav
+       11a. HEADER — stacked logo + wrapping nav
        Switch from a single horizontal flex row to a vertical
        column so the logo sits above the nav links, and the nav
        links themselves wrap onto multiple lines if needed.
@@ -536,7 +572,7 @@ section {
 
 
     /* ----------------------------------------------------------
-       10b. HERO — centred text, tighter padding
+       11b. HERO — centred text, tighter padding
        Remove the left-heavy desktop padding and centre all
        hero text. Increase top padding to clear the taller
        stacked header.
@@ -599,7 +635,7 @@ section {
 
 
     /* ----------------------------------------------------------
-       10c. CONTENT SECTIONS — smaller padding & font sizes
+       11c. CONTENT SECTIONS — smaller padding & font sizes
        The desktop sections have 100px vertical padding and
        1.2rem body text. Scale both down for comfortable reading
        on a phone without excessive whitespace.

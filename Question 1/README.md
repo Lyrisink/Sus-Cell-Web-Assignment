@@ -35,6 +35,7 @@ For this, I have used AI in doing certain things. Ideating and deciding all the 
 Based on the feedback in interview, I implemented some changes to it. It still has the same essence, because I've tried to keep it as clean as possible, and actually make it more user friendly. Adding too much or any heavy animations would have killed its minimalistic design. Based on this, I did the following changes over the previous one:
 * Added GSAP animation to all content text on hero page. Made two separate timelines, one for the navigation bar and one for body elements. Both start simultaneously when page is loaded/reloaded, each element sliding and fading in one after another. Both timelines take almost same time, and are pretty quick. Provides a more lively effect to the hero page.
 * Added media query in CSS file so that the hero page doesn't appear bad on smaller/mobile devices. Adjusted the nav bar at top of page, wrapped nav elements on it, aligned body to centre, removed svg vine animation and invisible globe hotspot, which ultimately make the hero page very clean on mobile devices. 
+* Added subtle fireflies animation on the hero page. SUbtle green dots with soft glow constantly move around the page making it more alive.
 
 ## Final List of all changes compared to original page:
 
@@ -47,4 +48,4 @@ Based on the feedback in interview, I implemented some changes to it. It still h
 * Added slide in/fade in animation to text using GSAP.
 * Added media query for mobile devices.
 
-In and all, I've done design changes, hover-based changes/ animations, custom-scroll/ motion effects, animated text, and glow effects. I by choice did not add any constant background animation as the page might look cluttered then. I've redisgned it rom the perspective that it can actually be implemented on the original website rather than just seeing it from assignment point of view.
+In and all, I've done design changes, hover-based changes/ animations, custom-scroll/ motion effects,background animation/ animated text, and glow effects.

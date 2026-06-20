@@ -31,6 +31,10 @@
        7c. Leaf pop-in animation & staggered delays
     8. PARTING CLOUDS ANIMATION
     9. CONTENT SECTIONS (Below the hero)
+   10. MOBILE RESPONSIVE STYLES (≤768px)
+       10a. Header — stacked logo + wrapping nav
+       10b. Hero — centred text, tighter padding
+       10c. Content sections — smaller padding & font sizes
    ============================================================ */
 
 
@@ -485,4 +489,132 @@ section {
 #events,
 #contact {
     background-color: #f9f9f9;
+}
+
+
+/* ============================================================
+   10. MOBILE RESPONSIVE STYLES (≤768px)
+   Applied when the viewport is phone-sized (up to 768px wide).
+
+   Key goals:
+     • Navigation bar wraps neatly across the top of the screen
+     • Hero text becomes centre-aligned
+     • Padding and font sizes scale down for small displays
+     • Vines hidden (too narrow to look good on phone)
+     • Globe hotspot disabled (layout change makes it irrelevant)
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    /* ----------------------------------------------------------
+       10a. HEADER — stacked logo + wrapping nav
+       Switch from a single horizontal flex row to a vertical
+       column so the logo sits above the nav links, and the nav
+       links themselves wrap onto multiple lines if needed.
+    ---------------------------------------------------------- */
+    .sticky-header {
+        flex-direction: column;  /* Stack logo above nav links */
+        align-items: center;     /* Centre everything horizontally */
+        padding: 12px 16px;      /* Much tighter than the desktop 20px 140px */
+        gap: 8px;                /* Breathing room between logo row and nav */
+    }
+
+    .nav-logo {
+        height: 40px;            /* Slightly smaller logo on phone */
+        margin-right: 0;         /* Remove the desktop right-margin (was 40px) */
+    }
+
+    .main-nav ul {
+        flex-wrap: wrap;         /* Allow links to wrap onto new lines */
+        justify-content: center; /* Centre the wrapped links */
+        gap: 10px 18px;          /* Tighter gap: 10px row, 18px column */
+    }
+
+    .main-nav a {
+        font-size: 0.9rem;       /* Slightly smaller text so links fit */
+    }
+
+
+    /* ----------------------------------------------------------
+       10b. HERO — centred text, tighter padding
+       Remove the left-heavy desktop padding and centre all
+       hero text. Increase top padding to clear the taller
+       stacked header.
+    ---------------------------------------------------------- */
+    .hero-wrapper {
+        padding: 100px 24px 40px; /* top clears the stacked header; sides tight */
+        justify-content: center;  /* Centre the content block horizontally */
+        align-items: flex-start;  /* Start from top — gives more room for text */
+    }
+
+    .hero-content-layout {
+        max-width: 100%;          /* Use full available width on narrow screens */
+        text-align: center;       /* Centre-align all hero text */
+        margin-top: 0;            /* Remove the -80px desktop pull-up */
+    }
+
+    .main-heading {
+        font-size: 2.4rem;        /* Scaled down from 3.8rem */
+    }
+
+    #iitb {
+        font-size: 2rem;          /* Scaled down from 3.1rem */
+    }
+
+    .sub-heading {
+        font-size: 1.1rem;        /* Scaled down from 1.4rem */
+    }
+
+    /* Centre the quote text and its decorative pseudo-element quotes */
+    .fun-facts-container {
+        text-align: center;
+        height: 70px;             /* Slightly shorter fixed height */
+    }
+
+    /* Centre the CTA button */
+    .button-container {
+        margin-top: 0;            /* Remove the -30px desktop pull-up */
+        display: flex;
+        justify-content: center;
+    }
+
+
+    /* ----------------------------------------------------------
+       Vines — hide on mobile
+       The vine containers are 60px wide and sit at the far edges.
+       On a narrow phone screen they cover the text and look messy,
+       so we hide them entirely.
+    ---------------------------------------------------------- */
+    .vine-container {
+        display: none;
+    }
+
+    /* Globe hotspot — disable on mobile
+       The hotspot is positioned relative to the background image's
+       globe, which shifts with the changed hero padding. Hiding it
+       avoids a misplaced invisible tap target. */
+    .globe-hotspot {
+        display: none;
+    }
+
+
+    /* ----------------------------------------------------------
+       10c. CONTENT SECTIONS — smaller padding & font sizes
+       The desktop sections have 100px vertical padding and
+       1.2rem body text. Scale both down for comfortable reading
+       on a phone without excessive whitespace.
+    ---------------------------------------------------------- */
+    section {
+        padding: 60px 20px;       /* Was 100px 50px on desktop */
+    }
+
+    .section-container {
+        font-size: 1rem;          /* Was 1.2rem on desktop */
+    }
+
+    .section-container h2 {
+        font-size: 1.6rem;        /* Ensure headings aren't oversized on mobile */
+        margin-bottom: 12px;
+    }
+
 }

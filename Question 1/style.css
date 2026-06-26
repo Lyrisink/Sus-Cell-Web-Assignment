@@ -252,8 +252,8 @@ html {
 }
 
 /* Decorative curly quotes added via CSS pseudo-elements */
-.quote-text::before { content: '"'; font-size: 2rem; vertical-align: middle; margin-right: 5px; }
-.quote-text::after  { content: '"'; font-size: 2rem; vertical-align: middle; margin-left: 5px; }
+.quote-text::before { content: '“'; font-size: 2rem; vertical-align: middle; margin-right: 5px; }
+.quote-text::after  { content: '”'; font-size: 2rem; vertical-align: middle; margin-left: 5px; }
 
 /* Initial (hidden) state: offset to the left and invisible */
 .slide-out { opacity: 0; transform: translateX(-50px); }
